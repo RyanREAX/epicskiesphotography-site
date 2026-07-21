@@ -47,6 +47,7 @@
           <button class="admin-nav-btn" data-panel="availability" type="button">Availability &amp; Calendar</button>
           <button class="admin-nav-btn" data-panel="packages" type="button">Packages &amp; Pricing</button>
           <button class="admin-nav-btn" data-panel="gallery" type="button">Gallery / Photo Management</button>
+          <button class="admin-nav-btn" data-panel="portfolio" type="button">Public Portfolio</button>
           <button class="admin-nav-btn" data-panel="members" type="button">Members &amp; Roles</button>
         </nav>
 
@@ -159,6 +160,21 @@
               <div class="gallery-member-list" style="margin-top:1rem;"></div>
             </div>
           </section>
+          <section class="admin-panel is-hidden" data-panel="portfolio">
+            <h2>Public Senior Portfolio</h2>
+            <div class="admin-card">
+              <p class="admin-stub-note">Upload or remove photographs shown on the public Senior Portrait portfolio. Images are resized for the grid while retaining a high-resolution lightbox copy.</p>
+              <div class="file-picker">
+                <label class="btn btn-outline file-picker-btn" for="portfolio-file-input">Choose Portfolio Photos…</label>
+                <input type="file" id="portfolio-file-input" class="portfolio-file-input" multiple accept="image/*" hidden />
+                <span class="file-picker-name portfolio-file-name">No files selected</span>
+                <button class="btn btn-admin-primary portfolio-upload-btn" type="button">Upload to Portfolio</button>
+                <button class="btn btn-outline portfolio-import-btn" type="button">Import Existing 48 Photos</button>
+              </div>
+              <ul class="portfolio-progress-list upload-progress-list"></ul>
+              <div class="portfolio-admin-grid gallery-photo-grid"></div>
+            </div>
+          </section>
           <section class="admin-panel is-hidden" data-panel="members">
             <h2>Members &amp; Roles</h2>
             <p class="admin-stub-note">Coming in Phase 4 — assign clients to galleries by email and manage admin roles.</p>
@@ -172,5 +188,6 @@
       window.ADMIN_CONFIG = { site: 'senior' };
     </script>
     <script type="module" src="../assets/js/admin.js?v=9"></script>
+    <script type="module" src="../assets/js/portfolio-admin.js?v=1"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 /* Portfolio gallery: category filtering + lightbox slideshow */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initGallery() {
   const items = Array.from(document.querySelectorAll('.gallery-item'));
   const chips = Array.from(document.querySelectorAll('.filter-chip'));
   const lightbox = document.querySelector('.lightbox');
@@ -119,4 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-});
+}
+
+document.addEventListener('DOMContentLoaded', initGallery);
+document.addEventListener('portfolio:ready', initGallery);
