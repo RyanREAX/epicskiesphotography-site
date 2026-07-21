@@ -551,6 +551,7 @@ h1, h2, h3,
 .lightbox-prev,
 .lightbox-next {
   position: absolute;
+  z-index: 10;
   border: 1px solid rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
@@ -567,6 +568,7 @@ h1, h2, h3,
 .lightbox-close {
   top: -1rem;
   right: -1rem;
+  background: rgba(10, 10, 10, 0.82);
 }
 
 .lightbox-prev,
