@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/base.css?v=6" />
     <link rel="stylesheet" href="../assets/css/theme-wedding.css?v=3" />
-    <link rel="stylesheet" href="../assets/css/admin.css?v=5" />
+    <link rel="stylesheet" href="../assets/css/admin.css?v=6" />
   </head>
   <body class="admin-body">
     <div class="admin-gate">
@@ -95,6 +95,7 @@
                 <input type="file" id="watermark-image-file" class="watermark-image-file" accept="image/*" hidden />
                 <span class="file-picker-name watermark-file-name">No file selected</span>
                 <button class="btn btn-admin-primary watermark-image-upload-btn" type="button">Upload as Watermark Image</button>
+                <button class="btn btn-outline watermark-preview-btn" type="button">Preview Watermarks</button>
               </div>
             </div>
 
@@ -119,80 +120,10 @@
                 </div>
               </div>
 
-              <div class="admin-field-group image-scaling-panel">
-                <label class="admin-field-label">Image resolution scaling</label>
-                <div class="admin-form-row">
-                  <select class="watermark-resolution">
-                    <option value="2400">2400px — High</option>
-                    <option value="1920">1920px — Large screen</option>
-                    <option value="1600" selected>1600px — Recommended</option>
-                    <option value="1280">1280px — Medium</option>
-                    <option value="960">960px — Small</option>
-                    <option value="640">640px — Very small</option>
-                    <option value="480">480px — Lowest</option>
-                  </select>
-                  <select class="watermark-quality">
-                    <option value="95">95% — Maximum quality</option>
-                    <option value="90">90% — Very high</option>
-                    <option value="85" selected>85% — Recommended</option>
-                    <option value="75">75% — Smaller file</option>
-                    <option value="65">65% — Fast loading</option>
-                    <option value="50">50% — Lowest quality</option>
-                  </select>
-                </div>
-              </div>
-
               <label class="admin-checkbox-row">
                 <input type="checkbox" class="watermark-toggle" />
                 Upload photos with watermark
               </label>
-
-              <div class="watermark-options is-hidden">
-                <div class="admin-field-group">
-                  <label class="admin-field-label">Watermark pattern</label>
-                  <div class="admin-form-row">
-                    <select class="watermark-style">
-                      <option value="diagonal">Diagonal</option>
-                      <option value="tiled">Tiled</option>
-                      <option value="scrolling">Moving marquee (customer gallery)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="admin-field-group">
-                  <label class="admin-field-label">Watermark text (used only if no watermark image is selected below)</label>
-                  <input type="text" class="watermark-text" placeholder="Watermark text" value="EpicSkiesPhotography — PROOF" />
-                </div>
-
-                <div class="admin-field-group">
-                  <label class="admin-field-label">Watermark text appearance</label>
-                  <div class="admin-form-row">
-                    <select class="watermark-font-size">
-                      <option value="20">Small — 20px</option>
-                      <option value="30">Medium — 30px</option>
-                      <option value="42" selected>Large — 42px</option>
-                      <option value="56">Extra large — 56px</option>
-                      <option value="72">Maximum — 72px</option>
-                    </select>
-                    <select class="watermark-opacity">
-                      <option value="0.25">Light — 25%</option>
-                      <option value="0.35" selected>Normal — 35%</option>
-                      <option value="0.5">Strong — 50%</option>
-                      <option value="0.7">Bold — 70%</option>
-                    </select>
-                    <label class="watermark-color-control">Color <input type="color" class="watermark-font-color" value="#ffffff" /></label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="watermark-options is-hidden">
-                <div class="admin-field-group">
-                  <label class="admin-field-label">Watermark image (optional — overrides the text above; upload new ones in the library above)</label>
-                  <select class="watermark-image-select">
-                    <option value="">Text watermark (no image)</option>
-                  </select>
-                </div>
-              </div>
 
               <button class="btn btn-admin-primary gallery-upload-btn" type="button" style="width:100%; margin-top:0.5rem;">Upload Selected Photos</button>
               <ul class="upload-progress-list"></ul>
@@ -206,7 +137,21 @@
                   <button class="btn btn-outline gallery-delete-selected-btn" type="button">Delete Selected</button>
                 </div>
               </div>
-              <p class="admin-stub-note">"Apply Watermark to Selected" uses whichever style/resolution/text/image is currently set in the upload form above, even if "Upload photos with watermark" isn't checked.</p>
+              <div class="gallery-filter-options">
+                <div class="admin-field-group image-scaling-panel">
+                  <label class="admin-field-label">Image resolution scaling</label>
+                  <div class="admin-form-row">
+                    <select class="watermark-resolution"><option value="2400">2400px — High</option><option value="1920">1920px — Large screen</option><option value="1600" selected>1600px — Recommended</option><option value="1280">1280px — Medium</option><option value="960">960px — Small</option><option value="640">640px — Very small</option><option value="480">480px — Lowest</option></select>
+                    <select class="watermark-quality"><option value="95">95% — Maximum quality</option><option value="90">90% — Very high</option><option value="85" selected>85% — Recommended</option><option value="75">75% — Smaller file</option><option value="65">65% — Fast loading</option><option value="50">50% — Lowest quality</option></select>
+                  </div>
+                </div>
+                <div class="admin-field-group"><label class="admin-field-label">Watermark pattern</label><select class="watermark-style"><option value="diagonal">Diagonal</option><option value="tiled">Tiled</option><option value="scrolling">Moving marquee (customer gallery)</option></select></div>
+                <div class="admin-field-group"><label class="admin-field-label">Watermark text</label><input type="text" class="watermark-text" placeholder="Watermark text" value="EpicSkiesPhotography — PROOF" /></div>
+                <div class="admin-field-group"><label class="admin-field-label">Watermark text appearance</label><div class="admin-form-row"><label class="filter-control-label">Font size<select class="watermark-font-size"><option value="20">Small — 20px</option><option value="30">Medium — 30px</option><option value="42" selected>Large — 42px</option><option value="56">Extra large — 56px</option><option value="72">Maximum — 72px</option></select></label><label class="filter-control-label">Opacity<select class="watermark-opacity"><option value="0.25">Light — 25%</option><option value="0.35" selected>Normal — 35%</option><option value="0.5">Strong — 50%</option><option value="0.7">Bold — 70%</option></select></label><label class="watermark-color-control">Color <input type="color" class="watermark-font-color" value="#ffffff" /></label></div></div>
+                <div class="admin-field-group"><label class="admin-field-label">Watermark image (optional — overrides text)</label><select class="watermark-image-select"><option value="">Text watermark (no image)</option></select></div>
+                <div class="admin-field-group"><label class="admin-field-label">Apply current filters to a whole album</label><div class="admin-form-row"><select class="gallery-filter-album-select"></select><button class="btn btn-admin-primary gallery-filter-album-btn" type="button">Apply Current Filters to Whole Album</button></div></div>
+              </div>
+              <p class="admin-stub-note">The controls above set the watermark, resolution, and quality used for selected photos, whole albums, and watermarked uploads.</p>
               <div class="gallery-photo-grid"></div>
             </div>
 
@@ -233,6 +178,6 @@
     <script>
       window.ADMIN_CONFIG = { site: 'wedding' };
     </script>
-    <script type="module" src="../assets/js/admin.js?v=8"></script>
+    <script type="module" src="../assets/js/admin.js?v=9"></script>
   </body>
 </html>

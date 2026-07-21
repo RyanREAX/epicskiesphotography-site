@@ -111,8 +111,11 @@ function initGalleryPanel(site) {
   const watermarkImageSelect = document.querySelector('.watermark-image-select');
   const watermarkImageFile = document.querySelector('.watermark-image-file');
   const watermarkImageUploadBtn = document.querySelector('.watermark-image-upload-btn');
+  const watermarkPreviewBtn = document.querySelector('.watermark-preview-btn');
   const deleteSelectedBtn = document.querySelector('.gallery-delete-selected-btn');
   const watermarkSelectedBtn = document.querySelector('.gallery-watermark-selected-btn');
+  const filterAlbumSelect = document.querySelector('.gallery-filter-album-select');
+  const filterAlbumBtn = document.querySelector('.gallery-filter-album-btn');
   const deleteGalleryBtn = document.querySelector('.gallery-delete-btn');
   const memberEmailInput = document.querySelector('.gallery-member-email');
   const memberSelect = document.querySelector('.gallery-member-select');
@@ -266,6 +269,45 @@ function initGalleryPanel(site) {
     });
   }
 
+  if (watermarkPreviewBtn) {
+    watermarkPreviewBtn.addEventListener('click', async () => {
+      watermarkPreviewBtn.disabled = true;
+      const { images, error } = await listWatermarkImages(site);
+      watermarkPreviewBtn.disabled = false;
+      if (error) {
+        window.showToast ? window.showToast(`Couldn't load watermark previews: ${error.message}`) : alert(error.message);
+        return;
+      }
+
+      const overlay = document.createElement('div');
+      const escapeMarkup = (value) => String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+      overlay.className = 'watermark-library-lightbox';
+      overlay.innerHTML = `
+        <div class="watermark-library-dialog" role="dialog" aria-modal="true" aria-label="Uploaded watermark previews">
+          <div class="admin-card-header">
+            <h3>Uploaded Watermarks</h3>
+            <button type="button" class="watermark-library-close" aria-label="Close watermark previews">×</button>
+          </div>
+          <div class="watermark-library-grid">
+            ${images.length ? images.map((image) => `
+              <figure class="watermark-library-item">
+                ${image.url ? `<img src="${escapeMarkup(image.url)}" alt="${escapeMarkup(image.name)}" />` : '<div class="watermark-library-missing">Preview unavailable</div>'}
+                <figcaption>${escapeMarkup(image.name)}</figcaption>
+              </figure>`).join('') : '<p class="admin-stub-note">No watermark images have been uploaded yet.</p>'}
+          </div>
+        </div>`;
+      const close = () => overlay.remove();
+      overlay.querySelector('.watermark-library-close').addEventListener('click', close);
+      overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
+      document.body.appendChild(overlay);
+    });
+  }
+
   function getWatermarkConfig() {
     return { ...getWatermarkConfigForce(), enabled: !!(watermarkToggle && watermarkToggle.checked) };
   }
@@ -305,13 +347,15 @@ function initGalleryPanel(site) {
     await renderPhotoGrid();
   }
 
-  async function applyWatermarkToIds(ids) {
-    if (!ids.length) return;
+  async function applyWatermarkToPhotos(targets, targetLabel) {
+    if (!targets.length) {
+      window.showToast ? window.showToast('That album does not contain any photos yet.') : alert('That album does not contain any photos yet.');
+      return;
+    }
     const watermark = getWatermarkConfigForce();
-    const confirmed = confirm(`Apply the current watermark settings to ${ids.length} photo${ids.length > 1 ? 's' : ''}? This overwrites any existing watermarked preview for them. Each photo is processed in this browser one at a time, so this can take a little while for several photos - the list below shows live progress.`);
+    const confirmed = confirm(`Apply the current watermark and image-resolution settings to ${targetLabel}? This overwrites existing customer previews. Each photo is processed in this browser one at a time, and progress appears below.`);
     if (!confirmed) return;
 
-    const targets = currentPhotos.filter((p) => ids.includes(p.id));
     let succeeded = 0;
     let failed = 0;
 
@@ -335,6 +379,15 @@ function initGalleryPanel(site) {
       ? window.showToast(`Watermarked ${succeeded} photo${succeeded === 1 ? '' : 's'}${failed ? `, ${failed} failed` : ''}.`)
       : null;
     await renderPhotoGrid();
+  }
+
+  async function applyWatermarkToIds(ids) {
+    if (!ids.length) {
+      window.showToast ? window.showToast('Select at least one photo first.') : alert('Select at least one photo first.');
+      return;
+    }
+    const targets = currentPhotos.filter((p) => ids.includes(p.id));
+    await applyWatermarkToPhotos(targets, `${targets.length} selected photo${targets.length === 1 ? '' : 's'}`);
   }
 
   async function renderPhotoGrid() {
@@ -376,17 +429,48 @@ function initGalleryPanel(site) {
     watermarkSelectedBtn.addEventListener('click', () => applyWatermarkToIds(getCheckedPhotoIds()));
   }
 
+  if (filterAlbumBtn) {
+    filterAlbumBtn.addEventListener('click', async () => {
+      const galleryId = filterAlbumSelect.value;
+      if (!galleryId) {
+        window.showToast ? window.showToast('Select an album first.') : alert('Select an album first.');
+        return;
+      }
+      const albumName = filterAlbumSelect.options[filterAlbumSelect.selectedIndex]?.text || 'the selected album';
+      filterAlbumBtn.disabled = true;
+      try {
+        const { photos, error } = await listGalleryPhotosWithUrls(bucket, galleryId);
+        if (error) throw error;
+        await applyWatermarkToPhotos(photos, `all ${photos.length} photos in “${albumName}”`);
+      } catch (error) {
+        window.showToast ? window.showToast(`Couldn't apply filters: ${error.message}`) : alert(error.message);
+      } finally {
+        filterAlbumBtn.disabled = false;
+      }
+    });
+  }
+
   async function refreshGalleries(selectId) {
     const { galleries } = await listGalleries(site);
     gallerySelect.innerHTML = galleries
       .map((g) => `<option value="${g.id}">${g.title}</option>`)
       .join('');
+    if (filterAlbumSelect) {
+      filterAlbumSelect.innerHTML = galleries
+        .map((g) => `<option value="${g.id}">${g.title}</option>`)
+        .join('');
+    }
     if (selectId) gallerySelect.value = selectId;
+    if (filterAlbumSelect) filterAlbumSelect.value = gallerySelect.value;
     await renderPhotoGrid();
     await renderMembers();
   }
 
-  gallerySelect.addEventListener('change', () => { renderPhotoGrid(); renderMembers(); });
+  gallerySelect.addEventListener('change', () => {
+    if (filterAlbumSelect) filterAlbumSelect.value = gallerySelect.value;
+    renderPhotoGrid();
+    renderMembers();
+  });
 
   if (createBtn) {
     createBtn.addEventListener('click', async () => {

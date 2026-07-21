@@ -376,6 +376,88 @@
   margin: 0;
 }
 
+.gallery-filter-options {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.gallery-filter-options .admin-field-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-control-label {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.watermark-library-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.watermark-library-dialog {
+  width: min(900px, 96vw);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.watermark-library-close {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+.watermark-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.watermark-library-item {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.watermark-library-item img,
+.watermark-library-missing {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: #d8d8d8;
+  background-image: linear-gradient(45deg, #fff 25%, transparent 25%), linear-gradient(-45deg, #fff 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #fff 75%), linear-gradient(-45deg, transparent 75%, #fff 75%);
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+}
+
+.watermark-library-item figcaption {
+  margin-top: 0.6rem;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 .pricing-row {
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -419,5 +501,9 @@
   }
   .admin-main {
     padding: 1.5rem;
+  }
+  .admin-card-header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
