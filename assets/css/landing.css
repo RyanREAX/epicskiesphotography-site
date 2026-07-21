@@ -1,0 +1,564 @@
+/* Landing split — Senior Portraits (left) vs Weddings (right) */
+
+:root {
+  --seam-a: 58%;
+  --seam-b: 42%;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #0b1018;
+}
+
+body.landing {
+  /* subtle, moody orange → blue wash — echoes the seam glow without competing with the photo */
+  background: linear-gradient(90deg, #2a160a 0%, #0c0c0c 42%, #0c0c0c 58%, #0a1626 100%);
+  font-family: 'Jost', sans-serif;
+  color: #fff;
+}
+
+/* zoom shrinks the whole page to reveal the footer without scrolling — desktop only,
+   since it also throws off media-query pixel math (innerWidth vs. actual rendered
+   size diverge under `zoom`), which was silently breaking the mobile layout below */
+@media (min-width: 861px) {
+  body.landing {
+    zoom: 0.78;
+  }
+}
+
+.landing-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 2.2rem;
+  pointer-events: none;
+}
+
+.landing-topbar * {
+  pointer-events: auto;
+}
+
+.landing-brand {
+  position: absolute;
+  top: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.landing-brand .brand-mark {
+  width: 288px;
+  height: 288px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(120, 190, 255, 0.45));
+}
+
+.landing-brand em {
+  font-style: normal;
+  color: #bcdcff;
+}
+
+.landing-login {
+  text-decoration: none;
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.landing-login:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.split-stage {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+}
+
+.split-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  will-change: clip-path;
+  transition: clip-path 750ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-media {
+  position: absolute;
+  inset: -6%;
+  background-size: cover;
+  background-position: center;
+}
+
+.split-overlay {
+  position: absolute;
+  inset: 0;
+  transition: opacity 600ms ease, background 600ms ease;
+}
+
+/* barely-there wash — legibility comes mainly from text-shadow now, so the photo stays at its true brightness */
+.split-panel--senior .split-overlay {
+  background: radial-gradient(ellipse 40% 45% at 23% 50%, rgba(8, 5, 2, 0.32) 0%, rgba(10, 6, 3, 0.12) 55%, rgba(10, 6, 3, 0) 80%);
+}
+
+.split-panel--wedding .split-overlay {
+  background: radial-gradient(ellipse 40% 45% at 77% 50%, rgba(8, 6, 10, 0.32) 0%, rgba(10, 7, 12, 0.12) 55%, rgba(10, 7, 12, 0) 80%);
+}
+
+.split-content {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 3.2rem;
+  max-width: 30rem;
+  /* flex items default to min-width:auto, which refuses to shrink below the
+     widest unbreakable content (e.g. the CTA text) and ignores max-width —
+     this is what let content overflow past the panel on narrow screens */
+  min-width: 0;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7), 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
+.split-panel--senior .split-content { margin-right: auto; }
+.split-panel--wedding .split-content { margin-left: auto; }
+
+.split-kicker {
+  display: inline-block;
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  opacity: 0.9;
+}
+
+.split-panel--senior .split-kicker { color: #ffd166; }
+.split-panel--wedding .split-kicker { color: #cfe6f5; }
+
+.split-content h2 {
+  font-size: clamp(2.5rem, 4.4vw, 3.95rem);
+  line-height: 1.12;
+  margin: 0;
+}
+
+.split-panel--senior .split-content h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.9rem, 3.1vw, 2.85rem);
+}
+
+.split-panel--wedding .split-content h2 { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; }
+
+.split-content p {
+  margin: 1.1rem auto 0;
+  font-size: 1.24rem;
+  line-height: 1.7;
+  opacity: 0.82;
+  max-width: 28rem;
+}
+
+.split-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 1.3rem 2.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  transition: background 300ms ease, border-color 300ms ease, transform 300ms ease;
+}
+
+.split-panel--senior .split-cta:hover {
+  transform: translateX(4px);
+}
+
+.split-panel--wedding .split-cta:hover {
+  transform: translateX(-4px);
+}
+
+.split-panel--senior:hover .split-cta,
+.split-panel--senior:focus-visible .split-cta {
+  background: rgba(255, 209, 102, 0.14);
+  border-color: rgba(255, 209, 102, 0.7);
+}
+
+.split-panel--wedding:hover .split-cta,
+.split-panel--wedding:focus-visible .split-cta {
+  background: rgba(169, 203, 230, 0.16);
+  border-color: rgba(169, 203, 230, 0.7);
+}
+
+/* Crisp, elegant zigzag seam — straight-edged diamond teeth, not a curve.
+   The seam's clip-path, the media zoom, and the text fade are driven by a single
+   continuous requestAnimationFrame loop in assets/js/landing.js — both cursor-tracking
+   and the idle auto-sway read/write the same eased "center" value, so there's never a
+   snap when switching between the two; motion just carries on from wherever it was.
+   These base rules are only the very first paint before JS takes over, plus the
+   overlay/background swaps that are still toggled discretely via class. */
+
+@property --seam-center {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+.split-panel--senior,
+.split-panel--wedding,
+.seam-glow {
+  transition: background 900ms ease;
+}
+
+.split-panel--senior {
+  clip-path: polygon(0% 0%, 50% 0%, 56% 12.5%, 50% 25%, 44% 37.5%, 50% 50%, 56% 62.5%, 50% 75%, 44% 87.5%, 50% 100%, 0% 100%);
+}
+
+.split-panel--wedding {
+  clip-path: polygon(100% 0%, 50% 0%, 56% 12.5%, 50% 25%, 44% 37.5%, 50% 50%, 56% 62.5%, 50% 75%, 44% 87.5%, 50% 100%, 100% 100%);
+}
+
+/* Glowing seam ribbon — sits above both panels so the orange/blue light isn't hidden by the neighboring photo */
+
+.seam-glow {
+  --seam-center: 50%;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    #ff8c28 0%,
+    #ff8c28 calc(var(--seam-center) - 8%),
+    #46a0ff calc(var(--seam-center) + 8%),
+    #46a0ff 100%);
+  clip-path: polygon(48% 0%, 54% 12.5%, 48% 25%, 42% 37.5%, 48% 50%, 54% 62.5%, 48% 75%, 42% 87.5%, 48% 100%, 52% 100%, 46% 87.5%, 52% 75%, 58% 62.5%, 52% 50%, 46% 37.5%, 52% 25%, 58% 12.5%, 52% 0%);
+  filter: blur(14px);
+  opacity: 0.7;
+  mix-blend-mode: screen;
+}
+
+.split-stage.is-hover-left .split-panel--wedding .split-overlay {
+  background: linear-gradient(180deg, rgba(10, 8, 12, 0.55) 0%, rgba(8, 6, 10, 0.65) 50%, rgba(6, 5, 8, 0.85) 100%);
+}
+
+.split-stage.is-hover-right .split-panel--senior .split-overlay {
+  background: linear-gradient(180deg, rgba(12, 8, 5, 0.55) 0%, rgba(10, 7, 4, 0.65) 50%, rgba(8, 5, 3, 0.85) 100%);
+}
+
+.split-panel--senior .split-media,
+.split-panel--wedding .split-media {
+  background-image: url('../img/ellieyo.jpg');
+  background-repeat: no-repeat;
+  /* show the whole photo, uncropped and zoomed out — letterboxes to the dark page background left/right instead of cropping */
+  background-size: contain;
+  background-position: center center;
+}
+
+.split-panel--senior .split-media {
+  transform-origin: 35% 47%;
+}
+
+.split-panel--wedding .split-media {
+  transform-origin: 68% 47%;
+}
+
+.split-center-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  background: rgba(12, 12, 12, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 500ms ease, background 500ms ease, border-color 500ms ease;
+}
+
+/* soft ambient glow behind the badge, recolored per hovered side */
+.split-center-mark::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+  filter: blur(11px);
+  opacity: 0.5;
+  z-index: -1;
+  transition: background 650ms ease, opacity 650ms ease;
+}
+
+.split-stage.is-hover-left .split-center-mark,
+.split-stage.is-hover-right .split-center-mark {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* left = deep, elegant navy glow (diploma) */
+.split-stage.is-hover-left .split-center-mark {
+  border-color: rgba(120, 165, 255, 0.5);
+}
+
+.split-stage.is-hover-left .split-center-mark::before {
+  background: radial-gradient(circle, rgba(43, 88, 189, 0.55), rgba(43, 88, 189, 0.12) 55%, transparent 75%);
+  opacity: 0.85;
+}
+
+/* right = bright, elegant white-gold glow (ring) */
+.split-stage.is-hover-right .split-center-mark {
+  border-color: rgba(255, 240, 205, 0.55);
+}
+
+.split-stage.is-hover-right .split-center-mark::before {
+  background: radial-gradient(circle, rgba(255, 240, 200, 0.6), rgba(214, 178, 105, 0.16) 55%, transparent 75%);
+  opacity: 0.9;
+}
+
+.center-icon-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.72);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.split-stage.is-hover-left .center-icon-layer.is-diploma {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.split-stage.is-hover-right .center-icon-layer.is-ring {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.center-icon-layer svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.center-icon-layer.is-diploma svg {
+  stroke: #cfe0ff;
+}
+
+.center-icon-layer.is-ring svg {
+  stroke: #fbeecb;
+}
+
+.center-icon-layer.is-ring svg .gem-fill {
+  fill: #fbeecb;
+  fill-opacity: 0.16;
+  stroke: none;
+}
+
+.landing-footer {
+  position: relative;
+  background: linear-gradient(180deg, #16110f 0%, #100f13 50%, #0b1018 100%),
+    linear-gradient(90deg, rgba(255, 140, 40, 0.1) 0%, transparent 40%, transparent 60%, rgba(70, 150, 255, 0.1) 100%);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 3.5rem 2rem 2.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.landing-footer .eyebrow {
+  font-size: 0.9rem;
+}
+
+.landing-footer .footer-grid {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.landing-footer .footer-link-card {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  padding: 1.5rem 1.6rem;
+  text-decoration: none;
+  color: #fff;
+  text-align: left;
+  font-size: 1.08rem;
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(10px);
+  transition: border-color 220ms ease, background 220ms ease, transform 220ms ease;
+}
+
+.landing-footer .footer-link-card--senior:hover {
+  border-color: rgba(255, 160, 80, 0.5);
+  background: rgba(255, 150, 70, 0.06);
+  transform: translateY(-2px);
+}
+
+.landing-footer .footer-link-card--wedding:hover {
+  border-color: rgba(110, 170, 255, 0.5);
+  background: rgba(90, 160, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.landing-footer .footer-link-card--senior span { color: #ffb066; }
+.landing-footer .footer-link-card--wedding span { color: #8fc4ff; }
+
+.landing-footer .footer-link-card--wedding {
+  text-align: right;
+}
+
+.landing-footer .footer-link-card span {
+  display: block;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 0.4rem;
+}
+
+.landing-footer p.meta {
+  font-size: 0.95rem;
+  opacity: 0.55;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  /* Phones stay side-by-side just like desktop — same clip-path zigzag, same shared
+     contain-sized photo — just with everything scaled down to actually fit a narrow
+     column instead of stacking the two sides on top of each other. */
+
+  .landing-brand .brand-mark {
+    width: clamp(64px, 18vw, 120px);
+    height: clamp(64px, 18vw, 120px);
+  }
+
+  .landing-topbar {
+    padding: 1.4rem 0.5rem;
+  }
+
+  .landing-login {
+    font-size: clamp(0.5rem, 2vw, 0.7rem);
+    padding: clamp(0.4rem, 1.8vw, 0.6rem) clamp(0.5rem, 2.6vw, 1rem);
+    white-space: nowrap;
+  }
+
+  .split-stage {
+    height: 68vh;
+    min-height: 420px;
+  }
+
+  .split-panel--senior .split-media,
+  .split-panel--wedding .split-media {
+    background-position: top center;
+  }
+
+  .split-panel {
+    align-items: flex-end;
+  }
+
+  .split-content {
+    padding: 1.2rem 0.6rem 2.4rem;
+    max-width: 39vw;
+  }
+
+  .split-kicker {
+    font-size: clamp(0.5rem, 1.9vw, 0.7rem);
+    letter-spacing: 0.14em;
+    margin-bottom: 0.5rem;
+  }
+
+  .split-content h2,
+  .split-panel--senior .split-content h2 {
+    font-size: clamp(0.95rem, 4.2vw, 1.6rem);
+    line-height: 1.15;
+  }
+
+  .split-content p {
+    font-size: clamp(0.6rem, 2.1vw, 0.85rem);
+    line-height: 1.4;
+    margin-top: 0.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .split-cta {
+    font-size: clamp(0.52rem, 1.9vw, 0.85rem);
+    padding: clamp(0.5rem, 2vw, 0.9rem) clamp(0.6rem, 2.6vw, 1.6rem);
+    gap: 0.3rem;
+    margin-top: clamp(0.6rem, 2.5vw, 1.2rem);
+    max-width: 100%;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .split-center-mark {
+    width: clamp(38px, 10vw, 64px);
+    height: clamp(38px, 10vw, 64px);
+  }
+
+  .landing-footer {
+    padding: 0.7rem 0.8rem 1rem;
+  }
+
+  .landing-footer .eyebrow {
+    font-size: clamp(0.5rem, 1.8vw, 0.65rem) !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .landing-footer .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .landing-footer .footer-link-card {
+    padding: 0.65rem 0.75rem;
+    font-size: clamp(0.55rem, 2vw, 0.72rem);
+    border-radius: 12px;
+  }
+
+  .landing-footer .footer-link-card span {
+    font-size: clamp(0.42rem, 1.5vw, 0.58rem);
+    margin-bottom: 0.2rem;
+  }
+}

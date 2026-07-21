@@ -1,0 +1,60 @@
+/* Senior Portraits theme — bold, warm, golden-hour energy */
+
+:root {
+  --bg: #1b140f;
+  --bg-rgb: 27, 20, 15;
+  --surface: #241b14;
+  --border: rgba(255, 231, 200, 0.14);
+  --text: #fbf1e6;
+  --text-muted: #cbb9a6;
+  --accent: #ff9d4d;
+  --accent-2: #ffd166;
+  --accent-rgb: 255, 157, 77;
+  --accent-grad: linear-gradient(120deg, #ff9d4d 0%, #ffd166 100%);
+  --on-accent: #201205;
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+  --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.35);
+  --admin-accent: #ff9d4d;
+  --admin-accent-rgb: 255, 157, 77;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 157, 77, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(255, 209, 102, 0.08), transparent 45%),
+    var(--bg);
+}
+
+.eyebrow {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.icon-badge {
+  box-shadow: 0 10px 30px rgba(255, 157, 77, 0.35);
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(255, 157, 77, 0.16), transparent 65%);
+  z-index: 0;
+}
+
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tier-card.is-popular {
+  background: linear-gradient(180deg, rgba(255, 157, 77, 0.08), transparent);
+}

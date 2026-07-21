@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="../assets/img/Logo1.png" />
+    <title>Admin — Weddings | EpicSkiesPhotography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/base.css?v=6" />
+    <link rel="stylesheet" href="../assets/css/theme-wedding.css?v=3" />
+    <link rel="stylesheet" href="../assets/css/admin.css?v=5" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-gate">
+      <div class="admin-gate-card">
+        <div class="icon-badge"></div>
+        <h1>Weddings Admin</h1>
+        <p>Sign in with an authorized account to manage bookings, packages, and client galleries.</p>
+        <button class="btn btn-admin-primary admin-gate-google" type="button">Continue with Google</button>
+        <button class="btn btn-outline admin-gate-facebook" type="button">Continue with Facebook</button>
+      </div>
+    </div>
+
+    <div class="admin-denied is-hidden">
+      <div class="admin-gate-card">
+        <h1>Not authorized</h1>
+        <p>This account doesn't have admin access to the Weddings site.</p>
+        <a class="btn btn-outline" href="../index.html">Back to Main Site</a>
+      </div>
+    </div>
+
+    <div class="admin-dashboard is-hidden">
+      <header class="admin-topbar">
+        <span class="admin-brand">EpicSkiesPhotography — Weddings Admin</span>
+        <div class="admin-topbar-right">
+          <span class="admin-user-email"></span>
+          <button class="btn btn-outline admin-signout-btn" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <div class="admin-layout">
+        <nav class="admin-sidebar">
+          <button class="admin-nav-btn is-active" data-panel="bookings" type="button">Bookings</button>
+          <button class="admin-nav-btn" data-panel="availability" type="button">Availability &amp; Calendar</button>
+          <button class="admin-nav-btn" data-panel="packages" type="button">Packages &amp; Pricing</button>
+          <button class="admin-nav-btn" data-panel="gallery" type="button">Gallery / Photo Management</button>
+          <button class="admin-nav-btn" data-panel="members" type="button">Members &amp; Roles</button>
+        </nav>
+
+        <main class="admin-main">
+          <section class="admin-panel" data-panel="bookings">
+            <h2>Bookings</h2>
+            <p class="admin-stub-note">Coming in Phase 5 — booking requests submitted from the Wedding site will appear here for review.</p>
+          </section>
+          <section class="admin-panel is-hidden" data-panel="availability">
+            <h2>Availability &amp; Calendar</h2>
+            <p class="admin-stub-note">Coming in Phase 5 — block or open dates, set session hours and locations.</p>
+          </section>
+          <section class="admin-panel is-hidden" data-panel="packages">
+            <h2>Packages &amp; Pricing</h2>
+            <div class="admin-card">
+              <h3>Packages</h3>
+              <p class="admin-stub-note">Each package has a base price + what's included, plus an optional single add-on (e.g. more photos, a USB stick, a photo book).</p>
+              <div class="pricing-package-list"></div>
+              <button type="button" class="btn btn-outline pricing-add-package-btn" style="margin-top:1rem;">Add New Package</button>
+            </div>
+
+            <div class="admin-card">
+              <h3>Gallery photo tiers (optional)</h3>
+              <p class="admin-stub-note">Leave this empty if your package price already covers all delivered photos. Only add tiers here if you want to offer extra prints/downloads for purchase from the delivered gallery.</p>
+              <div class="pricing-wedding-tier-list"></div>
+              <button type="button" class="btn btn-outline pricing-add-wedding-tier-btn" style="margin-top:1rem;">Add New Tier</button>
+            </div>
+          </section>
+          <section class="admin-panel is-hidden" data-panel="gallery">
+            <h2>Gallery / Photo Management</h2>
+
+            <div class="admin-card">
+              <h3>Create a new gallery</h3>
+              <div class="admin-form-row">
+                <input type="text" class="gallery-title-input" placeholder="e.g. Smith Wedding — June 2026" />
+                <input type="date" class="gallery-date-input" />
+                <button class="btn btn-admin-primary gallery-create-btn" type="button">Create Gallery</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <h3>Watermark image library</h3>
+              <p class="admin-stub-note">Upload a logo/graphic here once — it becomes selectable as a watermark whenever you upload or watermark photos below.</p>
+              <div class="file-picker">
+                <label class="btn btn-outline file-picker-btn" for="watermark-image-file">Browse Watermark…</label>
+                <input type="file" id="watermark-image-file" class="watermark-image-file" accept="image/*" hidden />
+                <span class="file-picker-name watermark-file-name">No file selected</span>
+                <button class="btn btn-admin-primary watermark-image-upload-btn" type="button">Upload as Watermark Image</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <h3>Upload photos</h3>
+              <p class="admin-stub-note">Photos upload one at a time — if one fails (too large, connection drop), the ones before it stay uploaded and only the failed file needs a retry.</p>
+
+              <div class="admin-field-group">
+                <label class="admin-field-label">Gallery</label>
+                <div class="admin-form-row">
+                  <select class="gallery-select"></select>
+                  <button type="button" class="btn btn-outline gallery-delete-btn">Delete Gallery</button>
+                </div>
+              </div>
+
+              <div class="admin-field-group">
+                <label class="admin-field-label">Photos to upload</label>
+                <div class="file-picker">
+                  <label class="btn btn-outline file-picker-btn" for="gallery-file-input">Browse Photos…</label>
+                  <input type="file" id="gallery-file-input" class="gallery-file-input" multiple accept="image/*" hidden />
+                  <span class="file-picker-name gallery-file-name">No files selected</span>
+                </div>
+              </div>
+
+              <div class="admin-field-group image-scaling-panel">
+                <label class="admin-field-label">Image resolution scaling</label>
+                <div class="admin-form-row">
+                  <select class="watermark-resolution">
+                    <option value="2400">2400px — High</option>
+                    <option value="1920">1920px — Large screen</option>
+                    <option value="1600" selected>1600px — Recommended</option>
+                    <option value="1280">1280px — Medium</option>
+                    <option value="960">960px — Small</option>
+                    <option value="640">640px — Very small</option>
+                    <option value="480">480px — Lowest</option>
+                  </select>
+                  <select class="watermark-quality">
+                    <option value="95">95% — Maximum quality</option>
+                    <option value="90">90% — Very high</option>
+                    <option value="85" selected>85% — Recommended</option>
+                    <option value="75">75% — Smaller file</option>
+                    <option value="65">65% — Fast loading</option>
+                    <option value="50">50% — Lowest quality</option>
+                  </select>
+                </div>
+              </div>
+
+              <label class="admin-checkbox-row">
+                <input type="checkbox" class="watermark-toggle" />
+                Upload photos with watermark
+              </label>
+
+              <div class="watermark-options is-hidden">
+                <div class="admin-field-group">
+                  <label class="admin-field-label">Watermark pattern</label>
+                  <div class="admin-form-row">
+                    <select class="watermark-style">
+                      <option value="diagonal">Diagonal</option>
+                      <option value="tiled">Tiled</option>
+                      <option value="scrolling">Moving marquee (customer gallery)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="admin-field-group">
+                  <label class="admin-field-label">Watermark text (used only if no watermark image is selected below)</label>
+                  <input type="text" class="watermark-text" placeholder="Watermark text" value="EpicSkiesPhotography — PROOF" />
+                </div>
+
+                <div class="admin-field-group">
+                  <label class="admin-field-label">Watermark text appearance</label>
+                  <div class="admin-form-row">
+                    <select class="watermark-font-size">
+                      <option value="20">Small — 20px</option>
+                      <option value="30">Medium — 30px</option>
+                      <option value="42" selected>Large — 42px</option>
+                      <option value="56">Extra large — 56px</option>
+                      <option value="72">Maximum — 72px</option>
+                    </select>
+                    <select class="watermark-opacity">
+                      <option value="0.25">Light — 25%</option>
+                      <option value="0.35" selected>Normal — 35%</option>
+                      <option value="0.5">Strong — 50%</option>
+                      <option value="0.7">Bold — 70%</option>
+                    </select>
+                    <label class="watermark-color-control">Color <input type="color" class="watermark-font-color" value="#ffffff" /></label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="watermark-options is-hidden">
+                <div class="admin-field-group">
+                  <label class="admin-field-label">Watermark image (optional — overrides the text above; upload new ones in the library above)</label>
+                  <select class="watermark-image-select">
+                    <option value="">Text watermark (no image)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn btn-admin-primary gallery-upload-btn" type="button" style="width:100%; margin-top:0.5rem;">Upload Selected Photos</button>
+              <ul class="upload-progress-list"></ul>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>Photos in this gallery</h3>
+                <div class="admin-form-row" style="margin:0;">
+                  <button class="btn btn-outline gallery-watermark-selected-btn" type="button">Apply Watermark to Selected</button>
+                  <button class="btn btn-outline gallery-delete-selected-btn" type="button">Delete Selected</button>
+                </div>
+              </div>
+              <p class="admin-stub-note">"Apply Watermark to Selected" uses whichever style/resolution/text/image is currently set in the upload form above, even if "Upload photos with watermark" isn't checked.</p>
+              <div class="gallery-photo-grid"></div>
+            </div>
+
+            <div class="admin-card">
+              <h3>Who can view this gallery</h3>
+              <p class="admin-stub-note">Choose any registered account, or enter an email as a fallback. A client appears here after signing in at least once.</p>
+              <div class="admin-form-row">
+                <select class="gallery-member-select"><option value="">Select a registered user…</option></select>
+                <input type="email" class="gallery-member-email" placeholder="client@email.com" />
+                <button type="button" class="btn btn-admin-primary gallery-member-add-btn">Add Access</button>
+              </div>
+              <div class="gallery-member-list" style="margin-top:1rem;"></div>
+            </div>
+          </section>
+          <section class="admin-panel is-hidden" data-panel="members">
+            <h2>Members &amp; Roles</h2>
+            <p class="admin-stub-note">Coming in Phase 4 — assign clients to galleries by email and manage admin roles.</p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="../assets/js/main.js?v=2"></script>
+    <script>
+      window.ADMIN_CONFIG = { site: 'wedding' };
+    </script>
+    <script type="module" src="../assets/js/admin.js?v=8"></script>
+  </body>
+</html>

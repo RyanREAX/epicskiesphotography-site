@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../assets/img/logo3.png" />
+    <title>Client Gallery — Senior Portraits | EpicSkiesPhotography</title>
+    <meta name="description" content="View your private senior portrait proofs and order prints or digital downloads." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/base.css?v=7" />
+    <link rel="stylesheet" href="../assets/css/theme-senior.css?v=3" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="index.html#packages">Packages</a>
+        <a href="index.html#booking">Book Now</a>
+        <a href="gallery.html" class="nav-cta is-active">Client Gallery</a>
+        <a href="../index.html" class="nav-back">Main Site →</a>
+        <a href="../adminsenior/" class="admin-link">Admin</a>
+      </nav>
+      <div class="header-brand-group">
+        <a class="brand" href="index.html"><img class="brand-mark" src="../assets/img/logo3.png" alt="EpicSkiesPhotography" /><span class="brand-sub">Senior Portraits</span></a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>
+    </header>
+
+    <main>
+      <section class="page-hero" style="padding-bottom:2rem;">
+        <p class="eyebrow">Private Client Gallery</p>
+        <h1>Your session is ready.</h1>
+        <p>Sign in with the same account your photographer used to invite you, to view your galleries and order prints or digital downloads.</p>
+      </section>
+
+      <section class="section" style="padding-top:0;">
+        <div class="login-gate">
+          <div class="icon-badge"></div>
+          <h2 style="font-size:1.4rem;">Sign in to view your gallery</h2>
+          <p>Use whichever account (Google or Facebook) your photographer has on file for you.</p>
+          <button class="btn btn-primary btn-block login-google-btn" type="button">Continue with Google</button>
+          <button class="btn btn-outline btn-block login-facebook-btn" type="button">Continue with Facebook</button>
+        </div>
+
+        <div class="album-inventory gallery-hidden">
+          <div class="gallery-toolbar">
+            <p class="tier-status">Your galleries</p>
+            <div class="toolbar-actions">
+              <button class="btn btn-outline client-signout-btn" type="button">Sign out</button>
+            </div>
+          </div>
+          <div class="album-list"></div>
+        </div>
+
+        <div class="gallery-reveal gallery-hidden">
+          <div class="gallery-toolbar">
+            <p class="tier-status gallery-view-title">Gallery</p>
+            <div class="toolbar-actions">
+              <button class="btn btn-outline gallery-back-btn" type="button">← Back to Albums</button>
+              <button class="btn btn-outline select-all-btn" type="button">Select All</button>
+            </div>
+          </div>
+
+          <div class="proof-grid"></div>
+
+          <div class="checkout-bar" style="display:none;">
+            <span><strong id="checkout-summary">Select photos above</strong></span>
+            <button class="btn btn-primary checkout-btn" type="button">Checkout</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand">EpicSkiesPhotography</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="index.html#booking">Book Now</a>
+        <a href="gallery.html">Client Gallery</a>
+        <a href="../wedding/index.html">Wedding Site →</a>
+        <a href="../index.html">← Back to Landing Page</a>
+      </div>
+      <p class="footer-meta">© 2026 EpicSkiesPhotography. All rights reserved.</p>
+    </footer>
+
+    <script src="../assets/js/main.js?v=2"></script>
+    <script>
+      window.CLIENT_GALLERY_CONFIG = { site: 'senior' };
+    </script>
+    <script type="module" src="../assets/js/client-gallery.js?v=2"></script>
+  </body>
+</html>

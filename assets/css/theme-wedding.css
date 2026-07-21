@@ -1,0 +1,53 @@
+/* Wedding theme — soft, luminous, romantic editorial */
+
+:root {
+  --bg: #fffdfb;
+  --bg-rgb: 255, 253, 251;
+  --surface: #fbf3f4;
+  --border: rgba(60, 50, 55, 0.1);
+  --text: #2c2830;
+  --text-muted: #7c7178;
+  --accent: #e39fb2;
+  --accent-2: #a9cbe6;
+  --accent-rgb: 227, 159, 178;
+  --accent-grad: linear-gradient(120deg, #e39fb2 0%, #a9cbe6 100%);
+  --on-accent: #2c2830;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Jost', sans-serif;
+  --shadow-lg: 0 30px 80px rgba(180, 150, 160, 0.25);
+  --shadow-md: 0 16px 40px rgba(180, 150, 160, 0.16);
+  --admin-accent: #5b9bd1;
+  --admin-accent-rgb: 91, 155, 209;
+}
+
+body {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(227, 159, 178, 0.1), transparent 40%),
+    radial-gradient(circle at 92% 15%, rgba(169, 203, 230, 0.14), transparent 45%),
+    var(--bg);
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(227, 159, 178, 0.12), transparent 65%);
+  z-index: 0;
+}
+
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tier-card.is-popular {
+  background: linear-gradient(180deg, rgba(227, 159, 178, 0.06), transparent);
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
