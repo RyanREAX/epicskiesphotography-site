@@ -21,7 +21,6 @@ function canvasBlob(file, maxEdge, quality) {
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.querySelector('.portfolio-file-input');
   const uploadBtn = document.querySelector('.portfolio-upload-btn');
-  const importBtn = document.querySelector('.portfolio-import-btn');
   const nameEl = document.querySelector('.portfolio-file-name');
   const grid = document.querySelector('.portfolio-admin-grid');
   const progress = document.querySelector('.portfolio-progress-list');
@@ -67,17 +66,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   input?.addEventListener('change', () => { nameEl.textContent = `${input.files.length} file${input.files.length === 1 ? '' : 's'} selected`; });
   uploadBtn?.addEventListener('click', () => uploadFiles(Array.from(input.files)));
-  importBtn?.addEventListener('click', async () => {
-    if (!confirm('Import the existing 48 portfolio photographs into managed storage?')) return;
-    importBtn.disabled = true;
-    const files = [];
-    for (let index = 1; index <= 48; index += 1) {
-      const number = String(index).padStart(2, '0');
-      const response = await fetch(`../assets/img/senior-portfolio/full/pittsburgh-senior-portrait-${number}.webp`);
-      files.push(new File([await response.blob()], `pittsburgh-senior-${number}.webp`, { type: 'image/webp' }));
-    }
-    await uploadFiles(files, 10000000000000);
-    importBtn.disabled = false;
-  });
   render();
 });
