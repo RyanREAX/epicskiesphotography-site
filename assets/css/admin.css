@@ -397,6 +397,17 @@
   font-size: 0.8rem;
 }
 
+.admin-form-row .filter-control-label select {
+  flex: none;
+  height: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.gallery-filter-options .watermark-color-control {
+  align-self: flex-end;
+  min-height: 2.75rem;
+}
+
 .watermark-library-lightbox {
   position: fixed;
   inset: 0;
