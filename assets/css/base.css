@@ -524,6 +524,19 @@ h1, h2, h3,
   border-radius: 10px;
   object-fit: contain;
   margin: 0 auto;
+  cursor: zoom-in;
+  transform-origin: center center;
+  transition: transform 120ms ease-out;
+  user-select: none;
+  touch-action: none;
+}
+
+.lightbox img.is-zoomed {
+  cursor: grab;
+}
+
+.lightbox img.is-zoomed:active {
+  cursor: grabbing;
 }
 
 .lightbox figcaption {

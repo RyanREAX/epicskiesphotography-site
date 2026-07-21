@@ -14,6 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let visibleItems = items;
   let currentIndex = 0;
+  let zoom = 1;
+  let panX = 0;
+  let panY = 0;
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+
+  function renderZoom() {
+    lightboxImg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+    lightboxImg.classList.toggle('is-zoomed', zoom > 1);
+  }
+
+  function resetZoom() {
+    zoom = 1;
+    panX = 0;
+    panY = 0;
+    renderZoom();
+  }
 
   function openLightbox(index) {
     currentIndex = index;
@@ -23,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     lightboxImg.src = full;
     lightboxImg.alt = caption;
     lightboxCaption.textContent = caption;
+    lightboxCaption.hidden = !caption;
+    resetZoom();
     lightbox.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
@@ -51,6 +71,30 @@ document.addEventListener('DOMContentLoaded', () => {
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
+
+  lightboxImg.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    zoom = Math.min(6, Math.max(1, zoom * (event.deltaY < 0 ? 1.18 : 0.85)));
+    if (zoom === 1) { panX = 0; panY = 0; }
+    renderZoom();
+  }, { passive: false });
+
+  lightboxImg.addEventListener('dblclick', resetZoom);
+  lightboxImg.addEventListener('pointerdown', (event) => {
+    if (zoom === 1) return;
+    dragging = true;
+    dragStartX = event.clientX - panX;
+    dragStartY = event.clientY - panY;
+    lightboxImg.setPointerCapture(event.pointerId);
+  });
+  lightboxImg.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    panX = event.clientX - dragStartX;
+    panY = event.clientY - dragStartY;
+    renderZoom();
+  });
+  lightboxImg.addEventListener('pointerup', () => { dragging = false; });
+  lightboxImg.addEventListener('pointercancel', () => { dragging = false; });
 
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('is-open')) return;

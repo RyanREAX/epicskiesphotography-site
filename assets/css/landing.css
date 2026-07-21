@@ -537,11 +537,12 @@ body.landing {
   }
 
   .landing-footer {
-    padding: 0.7rem 0.8rem 1rem;
+    margin-top: 2rem;
+    padding: 1.4rem 0.8rem calc(4.5rem + env(safe-area-inset-bottom));
   }
 
   .landing-footer .eyebrow {
-    font-size: clamp(0.5rem, 1.8vw, 0.65rem) !important;
+    font-size: clamp(0.43rem, 1.53vw, 0.55rem) !important;
     margin-bottom: 0.5rem;
   }
 
@@ -553,12 +554,16 @@ body.landing {
 
   .landing-footer .footer-link-card {
     padding: 0.65rem 0.75rem;
-    font-size: clamp(0.55rem, 2vw, 0.72rem);
+    font-size: clamp(0.47rem, 1.7vw, 0.61rem);
     border-radius: 12px;
   }
 
   .landing-footer .footer-link-card span {
-    font-size: clamp(0.42rem, 1.5vw, 0.58rem);
+    font-size: clamp(0.36rem, 1.28vw, 0.49rem);
     margin-bottom: 0.2rem;
+  }
+
+  .landing-footer p.meta {
+    font-size: 0.8rem;
   }
 }
