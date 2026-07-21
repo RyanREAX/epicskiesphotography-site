@@ -308,7 +308,7 @@ function initGalleryPanel(site) {
   async function applyWatermarkToIds(ids) {
     if (!ids.length) return;
     const watermark = getWatermarkConfigForce();
-    const confirmed = confirm(`Apply the current watermark settings to ${ids.length} photo${ids.length > 1 ? 's' : ''}? This overwrites any existing watermarked preview for them. Each photo is processed on the server one at a time, so this can take a little while for several photos - the list below shows live progress.`);
+    const confirmed = confirm(`Apply the current watermark settings to ${ids.length} photo${ids.length > 1 ? 's' : ''}? This overwrites any existing watermarked preview for them. Each photo is processed in this browser one at a time, so this can take a little while for several photos - the list below shows live progress.`);
     if (!confirmed) return;
 
     const targets = currentPhotos.filter((p) => ids.includes(p.id));
