@@ -7,7 +7,31 @@
 
 import { supabase } from './auth.js?v=1';
 
+const VALID_SITES = new Set(['senior', 'wedding']);
+
+function validateSite(site) {
+  if (!VALID_SITES.has(site)) throw new Error('Invalid admin site category.');
+  return site;
+}
+
+function validateSiteBucket(site, bucket) {
+  validateSite(site);
+  if (bucket !== `${site}-galleries`) throw new Error('Gallery storage does not match this admin site.');
+}
+
+async function galleryBelongsToSite(galleryId, site) {
+  validateSite(site);
+  const { data, error } = await supabase
+    .from('galleries')
+    .select('id')
+    .eq('id', galleryId)
+    .eq('site', site)
+    .maybeSingle();
+  return { allowed: !!data, error };
+}
+
 export async function createGallery({ site, title, eventDate }) {
+  validateSite(site);
   const { data, error } = await supabase
     .from('galleries')
     .insert({ site, title, event_date: eventDate || null })
@@ -17,6 +41,7 @@ export async function createGallery({ site, title, eventDate }) {
 }
 
 export async function listGalleries(site) {
+  validateSite(site);
   const { data, error } = await supabase
     .from('galleries')
     .select('*')
@@ -27,7 +52,12 @@ export async function listGalleries(site) {
 
 /** Photos in a gallery, each with a temporary signed URL for previewing
  * (the bucket is private, so there's no permanent public URL). */
-export async function listGalleryPhotosWithUrls(bucket, galleryId) {
+export async function listGalleryPhotosWithUrls(bucket, galleryId, site) {
+  validateSiteBucket(site, bucket);
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error || !ownership.allowed) {
+    return { photos: [], error: ownership.error || { message: `This gallery does not belong to the ${site} site.` } };
+  }
   const { data: photos, error } = await supabase
     .from('gallery_photos')
     .select('*')
@@ -115,7 +145,19 @@ async function drawImageWatermark(context, width, height, watermarkBlob, waterma
 
 /** Creates and stores the customer preview entirely in the admin browser.
  * The full-resolution original remains untouched in private Storage. */
-export async function requestWatermark({ bucket, photoId, originalPath, watermark }) {
+export async function requestWatermark({ bucket, site, photoId, originalPath, watermark }) {
+  validateSiteBucket(site, bucket);
+  if (watermark.watermarkImagePath && !watermark.watermarkImagePath.startsWith(`${site}/`)) {
+    throw new Error(`That watermark belongs to the other admin site.`);
+  }
+  const { data: scopedPhoto, error: scopedPhotoError } = await supabase
+    .from('gallery_photos')
+    .select('id, galleries!inner(site)')
+    .eq('id', photoId)
+    .eq('galleries.site', site)
+    .maybeSingle();
+  if (scopedPhotoError) throw scopedPhotoError;
+  if (!scopedPhoto) throw new Error(`This photo does not belong to the ${site} site.`);
   const { data: originalFile, error: downloadError } = await supabase.storage.from(bucket).download(originalPath);
   if (downloadError) throw downloadError;
 
@@ -188,7 +230,11 @@ export async function requestWatermark({ bucket, photoId, originalPath, watermar
  * onFileStart/onFileSuccess/onFileError(file, index) let the caller render
  * independent per-file progress/retry UI instead of one big spinner.
  */
-export async function uploadPhotosSequentially({ bucket, galleryId, files, watermark, onFileStart, onFileSuccess, onFileError }) {
+export async function uploadPhotosSequentially({ bucket, site, galleryId, files, watermark, onFileStart, onFileSuccess, onFileError }) {
+  validateSiteBucket(site, bucket);
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error) throw ownership.error;
+  if (!ownership.allowed) throw new Error(`This gallery does not belong to the ${site} site.`);
   const fileArray = Array.from(files);
 
   for (let i = 0; i < fileArray.length; i += 1) {
@@ -208,7 +254,7 @@ export async function uploadPhotosSequentially({ bucket, galleryId, files, water
       if (rowError) throw rowError;
 
       if (watermark) {
-        await requestWatermark({ bucket, photoId: photoRow.id, originalPath: path, watermark });
+        await requestWatermark({ bucket, site, photoId: photoRow.id, originalPath: path, watermark });
       }
 
       if (onFileSuccess) onFileSuccess(file, i);
@@ -221,6 +267,7 @@ export async function uploadPhotosSequentially({ bucket, galleryId, files, water
 /** Uploads a reference watermark image (e.g. a logo) into the shared
  * watermark-assets bucket, under a per-site folder. */
 export async function uploadWatermarkImage(site, file) {
+  validateSite(site);
   const path = `${site}/${Date.now()}-${file.name}`;
   const { error } = await supabase.storage.from('watermark-assets').upload(path, file, { upsert: false });
   return { path, error };
@@ -229,6 +276,7 @@ export async function uploadWatermarkImage(site, file) {
 /** Lists previously uploaded watermark images for a site, with signed
  * preview URLs (bucket is private). */
 export async function listWatermarkImages(site) {
+  validateSite(site);
   const { data: files, error } = await supabase.storage.from('watermark-assets').list(site, {
     sortBy: { column: 'created_at', order: 'desc' },
   });
@@ -247,9 +295,19 @@ export async function listWatermarkImages(site) {
 /** Deletes one or more gallery photos - removes both the original and
  * watermarked Storage objects (if any) plus the gallery_photos row(s).
  * Caller is responsible for confirming with the user first. */
-export async function deleteGalleryPhotos(bucket, photos) {
+export async function deleteGalleryPhotos(bucket, photos, site) {
+  validateSiteBucket(site, bucket);
   const ids = photos.map((p) => p.id);
   if (!ids.length) return { error: null, deletedCount: 0 };
+  const { data: scopedPhotos, error: scopeError } = await supabase
+    .from('gallery_photos')
+    .select('id, galleries!inner(site)')
+    .in('id', ids)
+    .eq('galleries.site', site);
+  if (scopeError) return { error: scopeError };
+  if (!scopedPhotos || scopedPhotos.length !== ids.length) {
+    return { error: { message: `One or more selected photos do not belong to the ${site} site.` } };
+  }
   const paths = photos.flatMap((photo) =>
     [photo.storage_path_original, photo.storage_path_watermarked].filter(Boolean)
   );
@@ -273,7 +331,11 @@ export async function deleteGalleryPhotos(bucket, photos) {
  * watermarked), then the gallery row itself (gallery_photos and
  * gallery_members rows cascade automatically via their foreign keys).
  * Caller is responsible for confirming with the user first. */
-export async function deleteGallery(bucket, galleryId) {
+export async function deleteGallery(bucket, galleryId, site) {
+  validateSiteBucket(site, bucket);
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error) return { error: ownership.error };
+  if (!ownership.allowed) return { error: { message: `This gallery does not belong to the ${site} site.` } };
   const { data: photos, error: photosError } = await supabase
     .from('gallery_photos')
     .select('storage_path_original, storage_path_watermarked')
@@ -317,7 +379,9 @@ export async function listProfiles() {
   return { profiles: data || [], error };
 }
 
-export async function listGalleryMembers(galleryId) {
+export async function listGalleryMembers(galleryId, site) {
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error || !ownership.allowed) return { members: [], error: ownership.error || { message: 'Gallery site mismatch.' } };
   const { data, error } = await supabase
     .from('gallery_members')
     .select('user_id, profiles(email, display_name)')
@@ -325,19 +389,27 @@ export async function listGalleryMembers(galleryId) {
   return { members: data || [], error };
 }
 
-export async function addGalleryMember(galleryId, userId) {
+export async function addGalleryMember(galleryId, userId, site) {
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error || !ownership.allowed) return { error: ownership.error || { message: 'Gallery site mismatch.' } };
   const { error } = await supabase.from('gallery_members').insert({ gallery_id: galleryId, user_id: userId });
   return { error };
 }
 
-export async function removeGalleryMember(galleryId, userId) {
+export async function removeGalleryMember(galleryId, userId, site) {
+  const ownership = await galleryBelongsToSite(galleryId, site);
+  if (ownership.error || !ownership.allowed) return { error: ownership.error || { message: 'Gallery site mismatch.' } };
   const { error } = await supabase.from('gallery_members').delete().eq('gallery_id', galleryId).eq('user_id', userId);
   return { error };
 }
 
 /** Retries a single failed file without re-touching any others. */
-export async function retryUpload({ bucket, galleryId, file, watermark, onSuccess, onError }) {
+export async function retryUpload({ bucket, site, galleryId, file, watermark, onSuccess, onError }) {
   try {
+    validateSiteBucket(site, bucket);
+    const ownership = await galleryBelongsToSite(galleryId, site);
+    if (ownership.error) throw ownership.error;
+    if (!ownership.allowed) throw new Error(`This gallery does not belong to the ${site} site.`);
     const path = `${galleryId}/originals/${Date.now()}-${file.name}`;
     const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
     if (uploadError) throw uploadError;
@@ -350,7 +422,7 @@ export async function retryUpload({ bucket, galleryId, file, watermark, onSucces
     if (rowError) throw rowError;
 
     if (watermark) {
-      await requestWatermark({ bucket, photoId: photoRow.id, originalPath: path, watermark });
+      await requestWatermark({ bucket, site, photoId: photoRow.id, originalPath: path, watermark });
     }
 
     if (onSuccess) onSuccess(file);

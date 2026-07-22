@@ -99,32 +99,6 @@ body.landing {
   overflow: hidden;
 }
 
-.split-brand-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 3;
-  width: clamp(380px, 48vw, 700px);
-  height: clamp(150px, 18vw, 250px);
-  overflow: hidden;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(2, 5, 10, 0.78) 0%, rgba(4, 5, 8, 0.48) 42%, transparent 72%);
-  pointer-events: none;
-}
-
-.split-brand-watermark img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(680px, 72vw, 1080px);
-  height: auto;
-  transform: translate(-50%, -50%);
-  opacity: 0.3;
-  filter: saturate(0.82) brightness(0.92) drop-shadow(0 0 22px rgba(80, 180, 255, 0.28));
-  mix-blend-mode: screen;
-}
-
 .split-panel {
   position: absolute;
   inset: 0;
@@ -421,6 +395,7 @@ body.landing {
 
 .center-icon-layer.is-diploma svg .diploma-paper {
   fill: url(#diplomaPaper);
+  stroke-width: 2;
 }
 
 .center-icon-layer.is-diploma svg .icon-seal {
@@ -429,8 +404,20 @@ body.landing {
 }
 
 .center-icon-layer.is-diploma svg .diploma-ribbon {
-  fill: rgba(91, 143, 235, 0.28);
+  fill: rgba(91, 143, 235, 0.42);
   stroke: #d9e7ff;
+  stroke-width: 1.7;
+}
+
+.center-icon-layer.is-diploma svg .diploma-roll-face {
+  fill: rgba(135, 177, 247, 0.2);
+  stroke-width: 2;
+}
+
+.center-icon-layer.is-diploma svg .diploma-spiral,
+.center-icon-layer.is-diploma svg .diploma-edge {
+  stroke: #f3f7ff;
+  stroke-width: 1.7;
 }
 
 .center-icon-layer.is-ring svg .ring-band {
@@ -457,10 +444,25 @@ body.landing {
 .center-icon-layer.is-ring svg .sparkle {
   stroke: #fffdf3;
   stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ring-glint 1.8s ease-in-out infinite;
 }
 
 .center-icon-layer.is-ring svg .sparkle-two {
   opacity: 0.72;
+  animation-delay: 0.55s;
+}
+
+.center-icon-layer.is-ring svg .sparkle-three {
+  opacity: 0.58;
+  animation-delay: 1.05s;
+}
+
+@keyframes ring-glint {
+  0%, 35%, 100% { opacity: 0.28; transform: scale(0.7) rotate(0deg); }
+  48% { opacity: 1; transform: scale(1.25) rotate(45deg); }
+  62% { opacity: 0.48; transform: scale(0.85) rotate(90deg); }
 }
 
 .landing-footer {
@@ -536,16 +538,6 @@ body.landing {
   /* Phones stay side-by-side just like desktop — same clip-path zigzag, same shared
      contain-sized photo — just with everything scaled down to actually fit a narrow
      column instead of stacking the two sides on top of each other. */
-
-  .split-brand-watermark {
-    width: clamp(190px, 54vw, 280px);
-    height: clamp(82px, 23vw, 120px);
-  }
-
-  .split-brand-watermark img {
-    width: clamp(350px, 96vw, 510px);
-    opacity: 0.25;
-  }
 
   .landing-topbar {
     padding: 1.4rem 0.5rem;

@@ -19,7 +19,7 @@ import {
   listGalleryMembers,
   addGalleryMember,
   removeGalleryMember,
-} from './uploader.js?v=6';
+} from './uploader.js?v=7';
 import { initPricingPanel } from './admin-pricing.js?v=1';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -165,7 +165,7 @@ function initGalleryPanel(site) {
     if (!memberList) return;
     const galleryId = gallerySelect.value;
     if (!galleryId) { memberList.innerHTML = ''; return; }
-    const { members } = await listGalleryMembers(galleryId);
+    const { members } = await listGalleryMembers(galleryId, site);
     memberList.innerHTML = members.length
       ? members.map((m) => `
           <div class="pricing-row" style="padding:0.7rem 1rem;">
@@ -179,7 +179,7 @@ function initGalleryPanel(site) {
     memberList.querySelectorAll('.gallery-member-remove-btn').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (!confirm('Remove this client\'s access to the gallery?')) return;
-        const { error } = await removeGalleryMember(galleryId, btn.dataset.userId);
+        const { error } = await removeGalleryMember(galleryId, btn.dataset.userId, site);
         if (error) { window.showToast ? window.showToast(`Couldn't remove: ${error.message}`) : alert(error.message); return; }
         await renderMembers();
       });
@@ -210,7 +210,7 @@ function initGalleryPanel(site) {
         userId = profile.user_id;
       }
 
-      const { error } = await addGalleryMember(galleryId, userId);
+      const { error } = await addGalleryMember(galleryId, userId, site);
       if (error) { window.showToast ? window.showToast(`Couldn't add: ${error.message}`) : alert(error.message); return; }
       memberEmailInput.value = '';
       if (memberSelect) memberSelect.value = '';
@@ -225,7 +225,7 @@ function initGalleryPanel(site) {
       if (!galleryId) return;
       const title = gallerySelect.options[gallerySelect.selectedIndex]?.text || 'this gallery';
       if (!confirm(`Delete the entire gallery "${title}" and all its photos? This can't be undone.`)) return;
-      const { error } = await deleteGallery(bucket, galleryId);
+      const { error } = await deleteGallery(bucket, galleryId, site);
       if (error) { window.showToast ? window.showToast(`Couldn't delete gallery: ${error.message}`) : alert(error.message); return; }
       window.showToast ? window.showToast(`Deleted "${title}".`) : null;
       await refreshGalleries();
@@ -338,7 +338,7 @@ function initGalleryPanel(site) {
     if (!confirmed) return;
 
     const toDelete = currentPhotos.filter((p) => ids.includes(p.id));
-    const { error } = await deleteGalleryPhotos(bucket, toDelete);
+    const { error } = await deleteGalleryPhotos(bucket, toDelete, site);
     if (error) {
       window.showToast ? window.showToast(`Couldn't delete: ${error.message}`) : alert(error.message);
       return;
@@ -364,7 +364,7 @@ function initGalleryPanel(site) {
       const row = addProgressRow({ name: shortName });
       row.textContent = `${shortName} — watermarking…`;
       try {
-        await requestWatermark({ bucket, photoId: photo.id, originalPath: photo.storage_path_original, watermark });
+        await requestWatermark({ bucket, site, photoId: photo.id, originalPath: photo.storage_path_original, watermark });
         succeeded += 1;
         row.textContent = `${shortName} — watermarked ✓`;
         row.classList.add('is-success');
@@ -399,7 +399,7 @@ function initGalleryPanel(site) {
       return;
     }
     photoGrid.innerHTML = '<p class="admin-stub-note">Loading photos…</p>';
-    const { photos } = await listGalleryPhotosWithUrls(bucket, galleryId);
+    const { photos } = await listGalleryPhotosWithUrls(bucket, galleryId, site);
     currentPhotos = photos;
     if (!photos.length) {
       photoGrid.innerHTML = '<p class="admin-stub-note">No photos uploaded to this gallery yet.</p>';
@@ -439,7 +439,7 @@ function initGalleryPanel(site) {
       const albumName = filterAlbumSelect.options[filterAlbumSelect.selectedIndex]?.text || 'the selected album';
       filterAlbumBtn.disabled = true;
       try {
-        const { photos, error } = await listGalleryPhotosWithUrls(bucket, galleryId);
+        const { photos, error } = await listGalleryPhotosWithUrls(bucket, galleryId, site);
         if (error) throw error;
         await applyWatermarkToPhotos(photos, `all ${photos.length} photos in “${albumName}”`);
       } catch (error) {
@@ -512,6 +512,7 @@ function initGalleryPanel(site) {
       const rows = new Map();
       await uploadPhotosSequentially({
         bucket,
+        site,
         galleryId,
         files,
         watermark,
@@ -534,6 +535,7 @@ function initGalleryPanel(site) {
             row.classList.remove('is-error');
             retryUpload({
               bucket,
+              site,
               galleryId,
               file,
               watermark,
