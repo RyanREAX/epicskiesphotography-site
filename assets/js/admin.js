@@ -2,7 +2,7 @@
    Per-page identity comes from window.ADMIN_CONFIG.site, same pattern as
    window.GALLERY_CONFIG on the client gallery pages. */
 
-import { getSession, signInWithGoogle, signInWithFacebook, signOut, supabase } from './auth.js?v=1';
+import { getSession, signInWithGoogle, signInWithFacebook, signOut, supabase } from './auth.js?v=2';
 import {
   createGallery,
   listGalleries,

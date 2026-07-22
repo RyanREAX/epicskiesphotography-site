@@ -7,7 +7,7 @@
    store.js prototype used, just fed by real data instead of hardcoded
    window.GALLERY_CONFIG. */
 
-import { getSession, signInWithGoogle, signInWithFacebook, signOut, supabase } from './auth.js?v=1';
+import { getSession, signInWithGoogle, signInWithFacebook, signOut, supabase } from './auth.js?v=2';
 
 function escapeHtml(value) {
   return String(value)

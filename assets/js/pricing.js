@@ -4,7 +4,7 @@
    description and an optional single add-on. Fully separate tables, per
    the "senior and wedding are separate businesses" requirement. */
 
-import { supabase } from './auth.js?v=1';
+import { supabase } from './auth.js?v=2';
 
 export async function listSeniorTiers() {
   const { data, error } = await supabase

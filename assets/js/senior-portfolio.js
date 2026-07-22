@@ -2,7 +2,7 @@
    Separate thumbnails keep the grid fast; full-size optimized files load
    only when a visitor opens the lightbox. */
 
-import { supabase } from './auth.js?v=1';
+import { supabase } from './auth.js?v=2';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const gallery = document.querySelector('[data-senior-portfolio]');

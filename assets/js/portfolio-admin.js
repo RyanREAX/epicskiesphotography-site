@@ -1,4 +1,4 @@
-import { supabase } from './auth.js?v=1';
+import { supabase } from './auth.js?v=2';
 
 const BUCKET = 'portfolio-assets';
 const SITE = window.ADMIN_CONFIG?.site || 'senior';

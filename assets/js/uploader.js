@@ -5,7 +5,7 @@
    already succeeded — each file's Storage upload + gallery_photos row is
    committed independently, and only the failed file needs retrying. */
 
-import { supabase } from './auth.js?v=1';
+import { supabase } from './auth.js?v=2';
 
 const VALID_SITES = new Set(['senior', 'wedding']);
 

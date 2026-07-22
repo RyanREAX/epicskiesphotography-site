@@ -7,7 +7,16 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://iaoejcsohwentsyqryyp.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_6jtARcxZm8m4XzQB80MB4Q_MNAxsleB';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+    storage: window.localStorage,
+    storageKey: 'epicskiesphotography-auth',
+  },
+});
 
 function notify(message) {
   if (window.showToast) {
