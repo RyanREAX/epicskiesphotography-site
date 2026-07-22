@@ -296,8 +296,8 @@ body.landing {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  width: 84px;
-  height: 84px;
+  width: 96px;
+  height: 96px;
   border-radius: 999px;
   background: rgba(12, 12, 12, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -369,10 +369,10 @@ body.landing {
 }
 
 .center-icon-layer svg {
-  width: 28px;
-  height: 28px;
+  width: 42px;
+  height: 42px;
   fill: none;
-  stroke-width: 1.4;
+  stroke-width: 1.65;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -389,6 +389,14 @@ body.landing {
   fill: #fbeecb;
   fill-opacity: 0.16;
   stroke: none;
+}
+
+.center-icon-layer.is-diploma svg .icon-accent {
+  fill: rgba(207, 224, 255, 0.08);
+}
+
+.center-icon-layer.is-diploma svg .icon-seal {
+  fill: rgba(207, 224, 255, 0.14);
 }
 
 .landing-footer {
@@ -533,8 +541,13 @@ body.landing {
   }
 
   .split-center-mark {
-    width: clamp(38px, 10vw, 64px);
-    height: clamp(38px, 10vw, 64px);
+    width: clamp(46px, 12vw, 72px);
+    height: clamp(46px, 12vw, 72px);
+  }
+
+  .center-icon-layer svg {
+    width: clamp(26px, 7vw, 36px);
+    height: clamp(26px, 7vw, 36px);
   }
 
   .landing-footer {
