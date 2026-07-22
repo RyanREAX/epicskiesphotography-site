@@ -538,7 +538,7 @@ body.landing {
 
   .landing-footer {
     margin-top: 2rem;
-    padding: 1.4rem 0.8rem calc(0.75rem + env(safe-area-inset-bottom));
+    padding: 1.4rem 0.8rem 0.2rem;
   }
 
   .landing-footer .eyebrow {
