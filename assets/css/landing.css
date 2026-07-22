@@ -481,8 +481,8 @@ body.landing {
   }
 
   .split-stage {
-    height: calc(68vh + 1.5in);
-    min-height: calc(420px + 1.5in);
+    height: calc(68vh + 1in);
+    min-height: calc(420px + 1in);
   }
 
   .split-panel--senior .split-media,
