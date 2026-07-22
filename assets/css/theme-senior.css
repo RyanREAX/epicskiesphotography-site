@@ -58,3 +58,62 @@ body {
 .tier-card.is-popular {
   background: linear-gradient(180deg, rgba(255, 157, 77, 0.08), transparent);
 }
+
+.senior-invitation {
+  max-width: 920px;
+  text-align: center;
+}
+
+.senior-invitation h2 {
+  margin: 0.5rem 0 1rem;
+}
+
+.senior-invitation .quote {
+  max-width: 720px;
+  margin: 0 auto 1.6rem;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
+@media (max-width: 860px) {
+  .senior-home .site-header {
+    min-height: 58px;
+    padding: 0.3rem 0.7rem;
+    gap: 0.5rem;
+  }
+
+  .senior-home .brand {
+    gap: 0.35rem;
+  }
+
+  .senior-home .brand .brand-mark {
+    width: 54px;
+    height: 54px;
+  }
+
+  .senior-home .brand-sub {
+    font-size: 0.52rem;
+    letter-spacing: 0.16em;
+  }
+
+  .senior-home .nav-toggle {
+    padding: 0.48rem 0.7rem;
+  }
+
+  .senior-home .site-nav.open {
+    padding: 0.55rem 0.8rem 0.7rem;
+    gap: 0.2rem;
+    max-height: calc(100dvh - 58px);
+    overflow-y: auto;
+  }
+
+  .senior-home .site-nav.open a {
+    width: 100%;
+    padding: 0.48rem 0.55rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .senior-home .site-nav.open a.nav-cta {
+    padding: 0.52rem 0.8rem;
+  }
+}
