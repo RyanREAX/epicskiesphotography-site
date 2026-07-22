@@ -481,12 +481,13 @@ body.landing {
   }
 
   .split-stage {
-    height: calc(68vh + 1in);
-    min-height: calc(420px + 1in);
+    height: calc(68vh + 0.9in);
+    min-height: calc(420px + 0.9in);
   }
 
   .split-panel--senior .split-media,
   .split-panel--wedding .split-media {
+    inset: 0 -6% -12%;
     background-position: top center;
   }
 
