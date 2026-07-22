@@ -526,9 +526,9 @@ body.landing {
     padding: clamp(0.5rem, 2vw, 0.9rem) clamp(0.6rem, 2.6vw, 1.6rem);
     gap: 0.3rem;
     margin-top: clamp(0.6rem, 2.5vw, 1.2rem);
-    max-width: 100%;
+    max-width: none;
     text-align: center;
-    white-space: normal;
+    white-space: nowrap;
   }
 
   .split-center-mark {
