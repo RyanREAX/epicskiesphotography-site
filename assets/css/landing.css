@@ -99,6 +99,32 @@ body.landing {
   overflow: hidden;
 }
 
+.split-brand-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: clamp(380px, 48vw, 700px);
+  height: clamp(150px, 18vw, 250px);
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(2, 5, 10, 0.78) 0%, rgba(4, 5, 8, 0.48) 42%, transparent 72%);
+  pointer-events: none;
+}
+
+.split-brand-watermark img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(680px, 72vw, 1080px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+  filter: saturate(0.82) brightness(0.92) drop-shadow(0 0 22px rgba(80, 180, 255, 0.28));
+  mix-blend-mode: screen;
+}
+
 .split-panel {
   position: absolute;
   inset: 0;
@@ -369,8 +395,8 @@ body.landing {
 }
 
 .center-icon-layer svg {
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   fill: none;
   stroke-width: 1.65;
   stroke-linecap: round;
@@ -383,20 +409,58 @@ body.landing {
 
 .center-icon-layer.is-ring svg {
   stroke: #fbeecb;
+  filter: drop-shadow(0 0 4px rgba(255, 231, 170, 0.5));
 }
 
 .center-icon-layer.is-ring svg .gem-fill {
-  fill: #fbeecb;
-  fill-opacity: 0.16;
-  stroke: none;
+  fill: url(#diamondGlow);
+  fill-opacity: 0.78;
+  stroke: #fff8dc;
+  stroke-width: 1.1;
 }
 
-.center-icon-layer.is-diploma svg .icon-accent {
-  fill: rgba(207, 224, 255, 0.08);
+.center-icon-layer.is-diploma svg .diploma-paper {
+  fill: url(#diplomaPaper);
 }
 
 .center-icon-layer.is-diploma svg .icon-seal {
-  fill: rgba(207, 224, 255, 0.14);
+  fill: #a9c9ff;
+  fill-opacity: 0.32;
+}
+
+.center-icon-layer.is-diploma svg .diploma-ribbon {
+  fill: rgba(91, 143, 235, 0.28);
+  stroke: #d9e7ff;
+}
+
+.center-icon-layer.is-ring svg .ring-band {
+  stroke: url(#ringGold);
+  stroke-width: 3.2;
+}
+
+.center-icon-layer.is-ring svg .ring-inner {
+  stroke: #fff5c9;
+  stroke-width: 1.15;
+  opacity: 0.65;
+}
+
+.center-icon-layer.is-ring svg .ring-setting {
+  stroke: #ffe8a8;
+  stroke-width: 1.8;
+}
+
+.center-icon-layer.is-ring svg .gem-line {
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-width: 1.1;
+}
+
+.center-icon-layer.is-ring svg .sparkle {
+  stroke: #fffdf3;
+  stroke-width: 1.5;
+}
+
+.center-icon-layer.is-ring svg .sparkle-two {
+  opacity: 0.72;
 }
 
 .landing-footer {
@@ -473,9 +537,14 @@ body.landing {
      contain-sized photo — just with everything scaled down to actually fit a narrow
      column instead of stacking the two sides on top of each other. */
 
-  .landing-brand .brand-mark {
-    width: clamp(64px, 18vw, 120px);
-    height: clamp(64px, 18vw, 120px);
+  .split-brand-watermark {
+    width: clamp(190px, 54vw, 280px);
+    height: clamp(82px, 23vw, 120px);
+  }
+
+  .split-brand-watermark img {
+    width: clamp(350px, 96vw, 510px);
+    opacity: 0.25;
   }
 
   .landing-topbar {
@@ -546,8 +615,8 @@ body.landing {
   }
 
   .center-icon-layer svg {
-    width: clamp(26px, 7vw, 36px);
-    height: clamp(26px, 7vw, 36px);
+    width: clamp(32px, 8.5vw, 43px);
+    height: clamp(32px, 8.5vw, 43px);
   }
 
   .landing-footer {

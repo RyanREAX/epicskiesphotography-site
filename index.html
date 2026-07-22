@@ -12,12 +12,11 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Unbounded:wght@600;700&family=Jost:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/landing.css?v=17" />
+    <link rel="stylesheet" href="assets/css/landing.css?v=18" />
   </head>
   <body class="landing">
     <div class="landing-topbar">
       <a class="landing-login" href="senior/portfolio.html">Senior Portfolio</a>
-      <span class="landing-brand"><img class="brand-mark" src="assets/img/logo3.png" alt="EpicSkiesPhotography" /></span>
       <a class="landing-login" href="wedding/portfolio.html">Wedding Portfolio</a>
     </div>
 
@@ -44,24 +43,53 @@
         </div>
       </a>
 
+      <div class="split-brand-watermark" aria-hidden="true">
+        <img src="assets/img/logo3.png" alt="" />
+      </div>
+
       <div class="seam-glow" aria-hidden="true"></div>
 
       <div class="split-center-mark" aria-hidden="true">
         <div class="center-icon-layer is-diploma">
-          <svg viewBox="0 0 48 48">
-            <path class="icon-accent" d="M9 15.5h27.5v15H9z" />
-            <path d="M11.5 15.5c-3.4 0-5.5 2.5-5.5 5.4s2.1 5.4 5.5 5.4c3.1 0 5.4-2.3 5.4-5.4s-2.3-5.4-5.4-5.4Z" />
-            <path d="M36.5 15.5c3.4 0 5.5 2.5 5.5 5.4s-2.1 5.4-5.5 5.4c-3.1 0-5.4-2.3-5.4-5.4s2.3-5.4 5.4-5.4Z" />
-            <path d="M11.5 20.9h25M20 30.5l-1.6 10 5.6-3.4 5.6 3.4-1.6-10" />
-            <circle class="icon-seal" cx="24" cy="29.5" r="4.3" />
+          <svg viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="diplomaPaper" x1="8" y1="12" x2="54" y2="47" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#f8fbff" stop-opacity=".34" />
+                <stop offset="1" stop-color="#8fbaff" stop-opacity=".08" />
+              </linearGradient>
+            </defs>
+            <g transform="rotate(-9 31 29)">
+              <path class="diploma-paper" d="M13 19h38v19H13c-5 0-8-3.9-8-9.5S8 19 13 19Z" />
+              <ellipse cx="13" cy="28.5" rx="8" ry="9.5" />
+              <ellipse cx="13" cy="28.5" rx="3.2" ry="4.2" />
+              <path d="M13 23.4h38M13 33.6h38" />
+              <path class="diploma-roll" d="M51 19c4.8 0 8 3.9 8 9.5S55.8 38 51 38c-3.2 0-5.3-2.1-5.3-4.6s2.1-4.5 5.3-4.5" />
+              <path class="diploma-ribbon" d="M34.5 18.4v20.2M28.8 20.1l11.4-1.3-1.3 20.1-5.2-3.6-4.7 4.2-.2-19.4Z" />
+              <circle class="icon-seal" cx="34.4" cy="28.4" r="4.7" />
+            </g>
           </svg>
         </div>
         <div class="center-icon-layer is-ring">
-          <svg viewBox="0 0 48 48">
-            <path d="M15.2 23.3c-2.2 2.5-3.5 5.8-3.5 9.3 0 7.3 5.5 12.4 12.3 12.4s12.3-5.1 12.3-12.4c0-3.5-1.3-6.8-3.5-9.3" />
-            <path d="M17 19.1h14M17 19.1l4.5-7.2h5l4.5 7.2-7 7.2-7-7.2Z" />
-            <path d="m21.5 11.9 2.5 7.2 2.5-7.2M17 19.1h14M24 26.3v3.3" />
-            <path class="gem-fill" d="m17 19.1 4.5-7.2h5l4.5 7.2-7 7.2-7-7.2Z" />
+          <svg viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="diamondGlow" x1="21" y1="12" x2="43" y2="31" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fff" stop-opacity=".9" />
+                <stop offset=".5" stop-color="#ffe5a3" stop-opacity=".4" />
+                <stop offset="1" stop-color="#fff" stop-opacity=".12" />
+              </linearGradient>
+              <linearGradient id="ringGold" x1="15" y1="22" x2="49" y2="59" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fff7d2" />
+                <stop offset=".48" stop-color="#d9ad57" />
+                <stop offset="1" stop-color="#fff3bd" />
+              </linearGradient>
+            </defs>
+            <path class="ring-band" d="M23.8 27.2c-5.1 3-8.3 8.5-8.3 14.5C15.5 51 22.9 58.5 32 58.5S48.5 51 48.5 41.7c0-6-3.2-11.5-8.3-14.5" />
+            <path class="ring-inner" d="M24.5 32.5a11.5 11.5 0 1 0 15 0" />
+            <path class="ring-setting" d="M22.2 21.4 24 29.2h16l1.8-7.8M27.2 29.2l-1.1 4M36.8 29.2l1.1 4" />
+            <path class="gem-fill" d="m21.5 19 6.1-8.2h8.8l6.1 8.2L32 30 21.5 19Z" />
+            <path class="gem-line" d="M21.5 19h21M27.6 10.8 32 19l4.4-8.2M21.5 19 32 30l10.5-11" />
+            <path class="sparkle sparkle-one" d="M49 8v7M45.5 11.5h7" />
+            <path class="sparkle sparkle-two" d="M15 17v4M13 19h4" />
           </svg>
         </div>
       </div>
